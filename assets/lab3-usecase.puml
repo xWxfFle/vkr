@@ -1,0 +1,29 @@
+@startuml lab3-usecase
+skinparam shadowing false
+skinparam usecase {
+  BackgroundColor #F7F7F4
+  BorderColor #333333
+}
+left to right direction
+actor "Исследователь" as R
+actor "Читатель отчета" as V
+rectangle "Система сравнительной оценки подходов" {
+  usecase "UC1 Описать подход\nпо устройству цепочки" as UC1
+  usecase "UC2 Задать признаки\nи шкалы 0-3" as UC2
+  usecase "UC3 Рассчитать признаки\nбез метки варианта" as UC3
+  usecase "UC4 Собрать матрицу\nнаблюдений" as UC4
+  usecase "UC5 Выполнить PCA, EFA\nи анализ Хорна" as UC5
+  usecase "UC6 Построить факторный\nпрофиль реализации" as UC6
+  usecase "UC7 Интерпретировать профили\nна эталонном сценарии" as UC7
+  usecase "UC8 Открыть матрицу,\nправила и границы" as UC8
+}
+R --> UC1
+R --> UC2
+R --> UC3
+R --> UC4
+R --> UC5
+R --> UC6
+R --> UC7
+R --> UC8
+V --> UC8
+@enduml

@@ -1,0 +1,31 @@
+@startuml lab3-c4
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+AddRelTag("open", $lineColor="#333333", $textColor="#333333")
+
+Person(researcher, "Исследователь", "Задает сценарии, запускает сбор и анализ")
+Person(reader, "Читатель отчета", "Проверяет открытую матрицу и правила")
+
+System_Boundary(sys, "Система сравнительной оценки") {
+  Container(adapters, "Адаптеры реализаций", "Redux Toolkit, MobX, Zustand, Effector", "Модельный слой эталонного сценария")
+  Container(collect, "Сбор трасс", "npm run collect", "События, мутации, эффекты, реакция интерфейса")
+  Container(metrics, "Правила расчета", "src/shared/metrics.ts", "Шкалы 0-3 без чтения метки варианта")
+  Container(store, "Хранилище наблюдений", "CSV", "data/raw-observations.csv")
+  Container(analyze, "Статистический анализ", "npm run analyze", "PCA, EFA varimax, анализ Хорна")
+  Container(profiles, "Чтение профилей", "скрипты отчета", "Профили на поиске, черновике, сохранении, уходе")
+}
+
+System_Ext(github, "GitHub", "Открытый репозиторий стенда")
+
+Rel(researcher, adapters, "запускает сценарии")
+Rel(adapters, collect, "трасса выполнения")
+Rel(collect, metrics, "сырые события и состояние")
+Rel(metrics, store, "значения признаков")
+Rel(store, analyze, "матрица 240 строк")
+Rel(analyze, profiles, "нагрузки EFA и доли PCA")
+Rel(researcher, profiles, "интерпретирует профиль")
+Rel(metrics, github, "правила расчета")
+Rel(store, github, "матрица CSV")
+Rel(analyze, github, "скрипты анализа")
+Rel(reader, github, "читает данные и скрипты")
+@enduml

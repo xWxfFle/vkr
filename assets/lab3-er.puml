@@ -1,0 +1,104 @@
+@startuml lab3-er
+skinparam shadowing false
+skinparam linetype ortho
+skinparam class {
+  BackgroundColor #F7F7F4
+  BorderColor #333333
+}
+hide circle
+hide methods
+
+entity "Approach" as Approach {
+  * id : string
+  --
+  name : string
+  family : string
+}
+
+entity "Implementation" as Impl {
+  * id : string
+  --
+  library : string
+  adapter : string
+}
+
+entity "Scenario" as Scenario {
+  * id : string
+  --
+  name : string
+  is_reference : boolean
+}
+
+entity "Variant" as Variant {
+  * id : string
+  --
+  code : string
+  defect_label : string
+}
+
+entity "Observation" as Obs {
+  * id : string
+  --
+  trace_ref : string
+}
+
+entity "Feature" as Feature {
+  * id : string
+  --
+  name : string
+  scale : string
+}
+
+entity "Score" as Score {
+  * observation_id : string
+  * feature_id : string
+  --
+  value : int
+  rule_id : string
+}
+
+entity "PCAComponent" as PCA {
+  * id : int
+  --
+  variance_share : float
+}
+
+note bottom of PCA
+  Доля дисперсии PCA.
+  Не подменяет нагрузки EFA.
+end note
+
+entity "Factor" as Factor {
+  * id : int
+  --
+  name : string
+  method : string
+}
+
+entity "Loading" as Loading {
+  * factor_id : int
+  * feature_id : string
+  --
+  value : float
+}
+
+entity "Profile" as Profile {
+  * implementation_id : string
+  * factor_id : int
+  --
+  scenario_id : string
+  score : float
+}
+
+Approach ||--o{ Impl
+Impl ||--o{ Obs
+Scenario ||--o{ Obs
+Variant ||--o{ Obs
+Obs ||--o{ Score
+Feature ||--o{ Score
+Feature ||--o{ Loading
+Factor ||--o{ Loading
+Impl ||--o{ Profile
+Factor ||--o{ Profile
+Scenario ||--o{ Profile
+@enduml
