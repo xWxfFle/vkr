@@ -1,0 +1,64 @@
+﻿@startuml
+title Экспериментальный стенд факторного анализа
+
+skinparam packageStyle rectangle
+skinparam componentStyle rectangle
+top to bottom direction
+
+package "Входные данные эксперимента" {
+  [Матрица сценариев\n15 сценариев x 4 варианта] as Scenarios
+  [Фикстуры данных] as Fixtures
+}
+
+package "Исполнение моделей состояния" {
+  [Исполнитель сценариев] as Runner
+  [Общий интерфейс\nModelAdapter] as Adapter
+  [Redux Toolkit] as Redux
+  [MobX] as Mobx
+  [Zustand] as Zustand
+  [Effector] as Effector
+}
+
+package "Источники признаков" {
+  [Трасса выполнения] as Trace
+  [Финальное состояние] as State
+  [Исходный код модели] as Source
+}
+
+package "Формирование наблюдений" {
+  [Расчет признаков\n0-3 и количественные метрики] as Metrics
+  database "Матрица наблюдений\n240 строк" as Observations
+}
+
+package "Статистическая обработка" {
+  [Диагностика пригодности\nKMO + Bartlett] as Diagnostics
+  [PCA] as PCA
+  [EFA + varimax] as EFA
+  [Интерпретация факторов] as Interpretation
+}
+
+Scenarios --> Runner
+Fixtures --> Runner
+Runner --> Adapter
+
+Adapter <|.. Redux
+Adapter <|.. Mobx
+Adapter <|.. Zustand
+Adapter <|.. Effector
+
+Adapter --> Trace
+Adapter --> State
+Adapter --> Source
+
+Trace --> Metrics
+State --> Metrics
+Source --> Metrics
+Metrics --> Observations
+
+Observations --> Diagnostics
+Observations --> PCA
+PCA --> EFA
+Diagnostics --> Interpretation
+EFA --> Interpretation
+
+@enduml
